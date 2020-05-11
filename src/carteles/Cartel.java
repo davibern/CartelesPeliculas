@@ -119,7 +119,6 @@ public class Cartel implements Serializable{
         try(FileOutputStream fichero = new FileOutputStream(RUTA_FICHERO);
             ObjectOutputStream oos = new ObjectOutputStream(fichero)){
             oos.writeObject(listaPeliculas);
-            oos.close();
         } catch (FileNotFoundException ex) {
             System.err.println(ex.getMessage());
         } catch (IOException ex) {
@@ -132,12 +131,10 @@ public class Cartel implements Serializable{
      * Método que genera un fichero serializado vacío
      */
     public static void crearFicheroSerializadoVacio() {
-        
-        List<Cartel> listaVacia = new LinkedList<>();
-        
+                
         try(FileOutputStream fichero = new FileOutputStream(RUTA_FICHERO);
             ObjectOutputStream oos = new ObjectOutputStream(fichero)) {
-            oos.writeObject(listaVacia);
+            oos.writeObject(listaPeliculas);
             oos.close();
         } catch (FileNotFoundException ex) {
             System.err.println(ex.getMessage());
