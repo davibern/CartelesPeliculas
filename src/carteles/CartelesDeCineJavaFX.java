@@ -59,7 +59,7 @@ public class CartelesDeCineJavaFX extends Application implements Serializable {
     private Image image;
     private ImageView imageView;
     private static final long serialVersionUID = 54L;
-    private int longitudLista;
+    private boolean esModificado = false;
     private Scene scene;
     
     /**
@@ -120,8 +120,6 @@ public class CartelesDeCineJavaFX extends Application implements Serializable {
                 lista.forEach((s) -> {
                     this.listaCarteles.getItems().add(s);
                 });
-                // Guardo en un entero la cantidad de películas. Esto se usará para comprobar si ha habido cambios que no se hayan guardado.
-                longitudLista = lista.size();
             }
         // Excepciones mostradas al usuario    
         } catch (FileNotFoundException ex) {
@@ -217,9 +215,16 @@ public class CartelesDeCineJavaFX extends Application implements Serializable {
         
         DialogAltaCartel nuevaPelicula = new DialogAltaCartel(primaryStage);
         nuevaPelicula.showAndWait();
-
-        if(!nuevaPelicula.esCancelado())
+        
+        /*
+            Si se consigue añadir una nueva pelicula:
+            - Se añade a la lista
+            - Se indica que ha habido un cambio para que avise al usuario si no guarda
+        */
+        if(!nuevaPelicula.esCancelado()) {
             this.lista.add(nuevaPelicula.getCartel());
+            this.esModificado = true;
+        }
 
         this.actualizarListaPeliculas();
         
@@ -241,11 +246,17 @@ public class CartelesDeCineJavaFX extends Application implements Serializable {
         // Si el usuario indica que sí se elimina se procede, de lo contrario se cierra la ventana
         if(resultado.get() == ButtonType.OK) {
             
-            // Se comprueba que se ha seleccionado previamente una película de lista, sino salta mensaje de aviso para el usuario
+            /*
+                Si se consigue eliminar una pelicula
+                - Se elimina de lista
+                - Se actualiza la lista
+                - Se indica que ha habido un cambio para que avise al usuario si no guarda
+            */
             try {
                 System.out.println(this.listaCarteles.getSelectionModel().getSelectedIndex());
                 this.lista.remove(posicion);
                 this.actualizarListaPeliculas();
+                this.esModificado = true;
             } catch (IndexOutOfBoundsException e) {
                 this.mensaje("No has seleccionado ninguna película para eliminar.");
             }
@@ -308,8 +319,8 @@ public class CartelesDeCineJavaFX extends Application implements Serializable {
      */
     public void cerrar(Stage primaryStage) {
         
-        // Si detecto que la longitud de la lista ha variado pregunto si quiero guardar el fichero actualizado, si no se cierra sin más
-        if(longitudLista != lista.size()) {
+        // Si la modificación es verdadera se procede a guardar la lista
+        if(this.esModificado) {
             System.out.println("Ha cambiado la lista");
             Alert alerta = new Alert(AlertType.CONFIRMATION);
             alerta.setTitle("¿Deseas guardar los cambios?");
