@@ -115,16 +115,17 @@ public class DialogAltaCartel extends Stage {
             int estreno = Integer.parseInt(txtEstreno.getText());
             String cartel = txtCartel.getText();
             
-            if(nombre.length() == 0)
+            if(nombre.length() == 0) {
                 this.mensajeError("Es necesario introducir el nombre de la película.");
-            else if(estreno <= 0)
+            } else if(estreno <= 0) {
                 this.mensajeError("Es necesario que el año de estreno un número válido.");
-            else if(cartel.length() == 0)
+            } else if(cartel.length() == 0) {
                 this.mensajeError("Es necesario adjuntar el cartel de la película.");
-            else
+            } else {
                 pelicula = new Cartel(nombre, estreno, cartel);
                 this.cancelado = false;
                 this.close();
+            }
         } catch (NumberFormatException e) {
             this.mensajeError("El formato de la edad no es válido.");
             this.txtEstreno.setText("");
