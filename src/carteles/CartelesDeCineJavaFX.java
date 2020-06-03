@@ -188,6 +188,7 @@ public class CartelesDeCineJavaFX extends Application implements Serializable {
         primaryStage.setResizable(false);
         primaryStage.setTitle("Cartel de Películas");
         primaryStage.getIcons().add(new Image("file:src/media/ico.jpg"));
+        primaryStage.setOnCloseRequest(e -> this.cerrarAplicacion());
         primaryStage.show();
         
     }
@@ -363,6 +364,26 @@ public class CartelesDeCineJavaFX extends Application implements Serializable {
         alerta.setTitle("Listado de películas");
         alerta.setContentText(error);
         alerta.showAndWait();
+        
+    }
+    
+    /**
+     * Método que comprueba si se cierra la ventana del programa sin salir a través del menú si se han producido cambios
+     */
+    private void cerrarAplicacion() {
+        
+         // Si la modificación es verdadera se procede a guardar la lista
+        if(this.esModificado) {
+            System.out.println("Ha cambiado la lista");
+            Alert alerta = new Alert(AlertType.CONFIRMATION);
+            alerta.setTitle("¿Deseas guardar los cambios?");
+            alerta.setContentText("Se han producido cambios que no han sido guardados.\n¿Deseas conservar los cambios?");
+            Optional<ButtonType> resultado = alerta.showAndWait();
+            
+            if(resultado.get() == ButtonType.OK) {
+                this.guardar();
+            }
+        }
         
     }
     
