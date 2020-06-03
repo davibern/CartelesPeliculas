@@ -187,6 +187,7 @@ public class CartelesDeCineJavaFX extends Application implements Serializable {
         primaryStage.setScene(scene);
         primaryStage.setResizable(false);
         primaryStage.setTitle("Cartel de Películas");
+        primaryStage.getIcons().add(new Image("file:src/media/ico.jpg"));
         primaryStage.show();
         
     }
